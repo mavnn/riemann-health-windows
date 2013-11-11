@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Riemann;
 
 namespace RiemannHealth
@@ -31,6 +33,11 @@ namespace RiemannHealth
             var reporters = Health.Reporters(IncludeGC)
                 .ToList();
 
+            Task.Factory.StartNew(() => DoStuffLoop(reporters, client));
+        }
+
+        private void DoStuffLoop(List<IHealthReporter> reporters, Client client)
+        {
             while (!Cancel)
             {
                 foreach (var reporter in reporters)
